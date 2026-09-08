@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PLANA designs premium digital planners, Notion templates and printables. Find your match, build your own, and download instantly.">
+  <meta name="theme-color" content="#F7F4EF">
+  <title>PLANA — Plan better. Create more. Live lighter.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%239C8FC7'/><text x='16' y='22' font-size='16' font-family='Georgia' fill='white' text-anchor='middle'>P</text></svg>">
+
+  <!-- Apply the saved theme before first paint so the page never flashes. -->
+  <script>
+    (function () {
+      try {
+        var t = JSON.parse(localStorage.getItem('plana:theme'));
+        var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="announce">Free updates for life · <b>PLANA15</b> takes 15% off your first order</div>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#home" aria-label="PLANA home">
+        <span class="glyph" aria-hidden="true">P</span> PLANA
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#shop">Shop</a>
+        <a href="#plan">Plan Your Life</a>
+        <a href="#customize">Custom Planner</a>
+        <a href="#about">About</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" type="button" data-theme-toggle aria-pressed="false" aria-label="Switch to dark mode">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <a class="icon-btn" href="#shop?fav=1" aria-label="View favourites">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5S3.8 15.4 3.8 9.9A4.6 4.6 0 0 1 12 7.2a4.6 4.6 0 0 1 8.2 2.7c0 5.5-8.2 10.6-8.2 10.6z"/></svg>
+          <span class="count-dot" data-fav-count>0</span>
+        </a>
+        <button class="icon-btn" type="button" data-open-cart aria-label="Open cart">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h12l2 5H4z"/><path d="M5 7v13h14V7"/><path d="M9.5 11a2.5 2.5 0 0 0 5 0"/></svg>
+          <span class="count-dot" data-cart-count>0</span>
+        </button>
+        <div class="account" id="account" hidden>
+          <button class="account-btn" type="button" id="account-btn" aria-expanded="false" aria-haspopup="true">
+            <span class="avatar" data-user-initial aria-hidden="true">P</span>
+            <span class="who" data-user-name>Account</span>
+          </button>
+          <div class="account-pop" id="account-pop" hidden>
+            <b class="small" data-user-name>Account</b>
+            <div class="em" data-user-email></div>
+            <a class="btn btn-soft btn-sm btn-block" href="#shop?fav=1">My favourites</a>
+            <div class="divider"></div>
+            <button class="btn btn-ghost btn-sm btn-block" type="button" id="signout-btn">Sign out</button>
+          </div>
+        </div>
+        <button class="icon-btn nav-toggle" type="button" data-nav-open aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-nav" id="mobile-nav">
+    <div class="scrim" data-nav-close></div>
+    <nav class="sheet" aria-label="Mobile">
+      <div class="row-between">
+        <span class="brand"><span class="glyph" aria-hidden="true">P</span> PLANA</span>
+        <button class="icon-btn" type="button" data-nav-close aria-label="Close menu">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <a class="m-link" href="#home">Home <span>01</span></a>
+      <a class="m-link" href="#shop">Shop <span>02</span></a>
+      <a class="m-link" href="#plan">Plan Your Life <span>03</span></a>
+      <a class="m-link" href="#customize">Custom Planner <span>04</span></a>
+      <a class="m-link" href="#about">About <span>05</span></a>
+      <a class="m-link" href="#cart">Cart <span>06</span></a>
+      <a class="btn btn-primary btn-block" href="#plan" style="margin-top:12px">Find my planner</a>
+      <button class="btn btn-ghost btn-block btn-sm" type="button" data-signout>Sign out</button>
+    </nav>
+  </div>
+
+  <main id="main" tabindex="-1">
+
+    <!-- ==================== VIEW: LOGIN (the entry gate) ==================== -->
+    <section class="view" id="view-auth" data-route="login" hidden>
+      <div class="auth-grid">
+
+        <!-- ---------- brand half ---------- -->
+        <aside class="auth-brand">
+          <span class="blob blob-a" aria-hidden="true"></span>
+          <span class="blob blob-b" aria-hidden="true"></span>
+
+          <div>
+            <a class="brand" href="#login" aria-label="PLANA"><span class="glyph" aria-hidden="true">P</span> PLANA</a>
+          </div>
+
+          <div>
+            <span class="eyebrow">Welcome back</span>
+            <p class="headline" style="margin-top:14px">Plan better.<br>Create more.<br><em>Live lighter.</em></p>
+            <p class="sub">Sign in to reach your library, your saved builds and the planners you have favourited.</p>
+
+            <div class="auth-art" aria-hidden="true">
+              <div class="float-card a1" id="auth-art-1"></div>
+              <div class="float-card a2" id="auth-art-2"></div>
+            </div>
+
+            <ul class="auth-points">
+              <li><span class="tick" aria-hidden="true">✓</span> Your cart and favourites stay where you left them</li>
+              <li><span class="tick" aria-hidden="true">✓</span> Saved custom planner builds, ready to finish</li>
+              <li><span class="tick" aria-hidden="true">✓</span> Lifetime access to every file you download</li>
+            </ul>
+          </div>
+
+          <figure class="auth-quote">
+            <p>“The first planner I actually finished a semester with.”</p>
+            <figcaption class="row" style="gap:10px">
+              <span class="avatar" style="background:var(--lav);width:32px;height:32px;font-size:.75rem">L</span>
+              <span class="xs muted">Layla A. — Engineering student</span>
+            </figcaption>
+          </figure>
+        </aside>
+
+        <!-- ---------- form half ---------- -->
+        <div class="auth-panel">
+          <div class="auth-card">
+            <h1 id="auth-title">Sign in to PLANA</h1>
+            <p class="auth-lede" id="auth-sub">Your planners, favourites and custom builds — all in one place.</p>
+
+            <div class="auth-tabs" role="tablist" aria-label="Sign in or create an account">
+              <button type="button" role="tab" id="tab-signin" data-auth-tab="signin" aria-selected="true" aria-controls="form-signin">Sign in</button>
+              <button type="button" role="tab" id="tab-signup" data-auth-tab="signup" aria-selected="false" aria-controls="form-signup">Create account</button>
+            </div>
+
+            <!-- SIGN IN -->
+            <form class="auth-form" id="form-signin" role="tabpanel" aria-labelledby="tab-signin" novalidate>
+              <div class="field">
+                <label for="login-email">Email</label>
+                <input class="input" id="login-email" type="email" autocomplete="email" placeholder="you@email.com" data-rules="required|email">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+
+              <div class="field">
+                <label for="login-pass">Password</label>
+                <div class="pw-wrap">
+                  <input class="input" id="login-pass" type="password" autocomplete="current-password" placeholder="••••••••" data-rules="required|pass">
+                  <button class="pw-toggle" type="button" data-pw-toggle="login-pass" aria-pressed="false">Show</button>
+                </div>
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+
+              <div class="row-between">
+                <label class="opt" style="border:0;background:none;padding:0">
+                  <input type="checkbox" id="remember" checked>
+                  <span class="mark" aria-hidden="true"></span>
+                  <span class="opt-text"><b style="font-weight:500;font-size:.88rem">Keep me signed in</b></span>
+                </label>
+                <button class="link-quiet" type="button" id="forgot">Forgot password?</button>
+              </div>
+
+              <button class="btn btn-primary btn-lg btn-block" type="submit" id="signin-btn">Sign in</button>
+
+              <div class="or-line">or</div>
+              <button class="btn btn-ghost btn-block" type="button" data-guest>Continue as a guest</button>
+
+              <div class="demo-note">
+                <span aria-hidden="true">🔐</span>
+                <span>
+                  <b>Demo account</b>
+                  Use <code>demo@plana.studio</code> / <code>plana1234</code>, or create an account below.
+                  Accounts are stored in this browser only — never type a real password into a portfolio project.
+                </span>
+              </div>
+            </form>
+
+            <!-- CREATE ACCOUNT -->
+            <form class="auth-form" id="form-signup" role="tabpanel" aria-labelledby="tab-signup" novalidate hidden>
+              <div class="field">
+                <label for="su-name">Full name</label>
+                <input class="input" id="su-name" autocomplete="name" placeholder="Sara Al-Ajmi" data-rules="required|min3">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+
+              <div class="field">
+                <label for="su-email">Email</label>
+                <input class="input" id="su-email" type="email" autocomplete="email" placeholder="you@email.com" data-rules="required|email">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+
+              <div class="field">
+                <label for="su-pass">Password</label>
+                <div class="pw-wrap">
+                  <input class="input" id="su-pass" type="password" autocomplete="new-password" placeholder="At least 8 characters" data-rules="required|pass">
+                  <button class="pw-toggle" type="button" data-pw-toggle="su-pass" aria-pressed="false">Show</button>
+                </div>
+                <div class="strength" id="pw-strength" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+                <span class="strength-label" id="pw-strength-label">Use 8+ characters, with a number for a stronger password.</span>
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+
+              <div class="field">
+                <label for="su-pass2">Confirm password</label>
+                <input class="input" id="su-pass2" type="password" autocomplete="new-password" placeholder="Repeat your password" data-rules="required">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+
+              <label class="opt">
+                <input type="checkbox" id="su-terms">
+                <span class="mark" aria-hidden="true"></span>
+                <span class="opt-text"><b>I agree to the terms &amp; privacy policy</b><span>Fictional brand — nothing is collected or sent anywhere.</span></span>
+              </label>
+              <span class="field-error" id="terms-error" aria-live="polite"></span>
+
+              <button class="btn btn-primary btn-lg btn-block" type="submit" id="signup-btn">Create my account</button>
+
+              <div class="or-line">or</div>
+              <button class="btn btn-ghost btn-block" type="button" data-guest>Continue as a guest</button>
+            </form>
+
+            <p class="xs muted" style="text-align:center;margin-top:22px">
+              PLANA is a fictional brand built as a front-end portfolio project. No data leaves your browser.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW: HOME ==================== -->
+    <section class="view" id="view-home" data-route="home">
+  <!-- ============================ HERO ============================ -->
+  <section class="hero">
+    <span class="blob blob-a" aria-hidden="true"></span>
+    <span class="blob blob-b" aria-hidden="true"></span>
+    <div class="container">
+      <div class="hero-grid">
+        <div class="reveal in">
+          <span class="eyebrow">Digital planners · Instant download</span>
+          <h1 class="display">Plan better.<br>Create more.<br><em>Live lighter.</em></h1>
+          <p class="lede">Beautiful digital planners designed around the way you actually live — not the way productivity books say you should.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary btn-lg" href="#shop">Explore Planners</a>
+            <a class="btn btn-ghost btn-lg" href="#customize">Build My Planner</a>
+          </div>
+          <div class="hero-stats">
+            <div><b>16</b><span>PLANNER FILES</span></div>
+            <div><b>42,000+</b><span>DOWNLOADS</span></div>
+            <div><b>4.8/5</b><span>AVERAGE RATING</span></div>
+          </div>
+        </div>
+
+        <div class="hero-art" id="hero-art" aria-hidden="true">
+          <div class="float-card f1"></div>
+          <div class="float-card f2"></div>
+          <div class="float-card f3"></div>
+          <span class="hero-chip c1"><span class="dot"></span> Habit streak · 21 days</span>
+          <span class="hero-chip c2">✦ 94% match found</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ MARQUEE ============================ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      <span>GoodNotes ready</span><span>Notability</span><span>Notion templates</span><span>Print at home</span>
+      <span>Hyperlinked tabs</span><span>Lifetime updates</span><span>iPad &amp; Android</span>
+      <span>GoodNotes ready</span><span>Notability</span><span>Notion templates</span><span>Print at home</span>
+      <span>Hyperlinked tabs</span><span>Lifetime updates</span><span>iPad &amp; Android</span>
+    </div>
+  </div>
+
+  <!-- ============================ FEATURED ============================ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="title-wrap">
+          <span class="eyebrow">Featured this month</span>
+          <h2>Planners people finish</h2>
+          <p>Four files that get opened again on week seven — the point where most planners quietly get abandoned.</p>
+        </div>
+        <a class="link-arrow" href="#shop">See all 16 planners
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <div class="product-grid grid-4" id="featured-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============================ CATEGORIES ============================ -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="title-wrap">
+          <span class="eyebrow">Browse by category</span>
+          <h2>Start where it hurts most</h2>
+        </div>
+      </div>
+      <div class="cat-grid" id="cat-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============================ FIND YOUR PLANNER ============================ -->
+  <section class="section">
+    <div class="container">
+      <div class="card card-pad reveal" style="padding:clamp(28px,4vw,56px);position:relative;overflow:hidden">
+        <span class="blob blob-c" style="top:-120px;right:-80px;left:auto" aria-hidden="true"></span>
+        <div class="split" style="position:relative;z-index:1">
+          <div>
+            <span class="eyebrow">PLANA Match</span>
+            <h2 style="margin:14px 0 14px">Find your perfect planner<br>in four questions.</h2>
+            <p class="lede">Answer honestly and our recommendation engine scores all 16 planners against your goals, your biggest challenge, your planning style and your rhythm — then shows you why it picked what it picked.</p>
+            <div class="row" style="margin-top:26px">
+              <a class="btn btn-dark" href="#plan">Start PLANA Match</a>
+              <span class="xs muted">Takes about 60 seconds · no sign-up</span>
+            </div>
+          </div>
+          <div>
+            <p class="label" style="margin-bottom:14px">What are you planning for?</p>
+            <div class="q-options" id="teaser-options" style="grid-template-columns:1fr 1fr"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ BEST SELLERS ============================ -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="title-wrap">
+          <span class="eyebrow">Best sellers</span>
+          <h2>What everyone else is planning with</h2>
+        </div>
+        <a class="link-arrow" href="#shop?sort=reviews">Shop best sellers
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+      <div class="product-grid grid-4" id="best-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============================ VALUE PROPS ============================ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="title-wrap">
+          <span class="eyebrow">Why PLANA</span>
+          <h2>Designed to be used, not admired</h2>
+        </div>
+      </div>
+      <div class="value-grid">
+        <article class="value reveal reveal-d1">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></span>
+          <h3>Built around one honest question</h3>
+          <p>Every file starts from a real problem — the week that falls apart on Wednesday, the goal that dies in March — and is designed backwards from there.</p>
+        </article>
+        <article class="value reveal reveal-d2">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h4"/></svg></span>
+          <h3>Hyperlinked and genuinely fast</h3>
+          <p>Tabs, month indexes and section jumps that work in GoodNotes, Notability and any PDF reader — no scrolling through 200 pages to find Thursday.</p>
+        </article>
+        <article class="value reveal reveal-d3">
+          <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20.5S3.8 15.4 3.8 9.9A4.6 4.6 0 0 1 12 7.2a4.6 4.6 0 0 1 8.2 2.7c0 5.5-8.2 10.6-8.2 10.6z"/></svg></span>
+          <h3>Yours, permanently</h3>
+          <p>One payment, instant download, lifetime updates. Build a custom version whenever your life stops matching the file you bought.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ TESTIMONIALS ============================ -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="title-wrap">
+          <span class="eyebrow">Loved by planners</span>
+          <h2>4.8 out of 5, across 5,000+ reviews</h2>
+        </div>
+      </div>
+      <div class="quotes" id="quotes"></div>
+    </div>
+  </section>
+
+  <!-- ============================ CUSTOM CTA ============================ -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="card card-pad reveal" style="padding:clamp(28px,4vw,52px);background:var(--accent-soft);border-color:transparent">
+        <div class="row-between">
+          <div style="max-width:52ch">
+            <span class="eyebrow">Custom planner studio</span>
+            <h2 style="margin:12px 0 10px">Nothing fits? Build the file yourself.</h2>
+            <p class="muted">Pick the type, theme, layout and sections. The preview updates as you click, and the price updates with it.</p>
+          </div>
+          <a class="btn btn-dark btn-lg" href="#customize">Open the builder</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+    </section>
+
+    <!-- ==================== VIEW: SHOP ==================== -->
+    <section class="view" id="view-shop" data-route="shop" hidden>
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="#home">Home</a><span class="sep">/</span><span aria-current="page">Shop</span>
+    </nav>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-head" style="margin-bottom:32px">
+        <div class="title-wrap">
+          <span class="eyebrow">The library</span>
+          <h1>Every PLANA file, in one place</h1>
+          <p>Sixteen planners, templates and kits. Filter by what you need, sort by what you trust, preview before you buy.</p>
+        </div>
+      </div>
+
+      <div class="shop-layout">
+        <!-- ---------------- FILTERS ---------------- -->
+        <aside class="filters" aria-label="Product filters">
+          <div class="filter-block">
+            <h4>Category</h4>
+            <div class="filter-list" id="cat-filters"></div>
+          </div>
+
+          <div class="filter-block">
+            <h4>Max price</h4>
+            <label class="sr-only" for="price-range">Maximum price</label>
+            <input type="range" id="price-range" min="8" max="40" step="1" value="40">
+            <div class="f-row" style="margin-top:10px">
+              <span class="xs muted">$8</span>
+              <b class="small tabular" id="price-out">$40</b>
+            </div>
+          </div>
+
+          <div class="filter-block">
+            <h4>Saved</h4>
+            <label class="opt">
+              <input type="checkbox" id="fav-only">
+              <span class="mark" aria-hidden="true"></span>
+              <span class="opt-text"><b>Favourites only</b><span>Show what you hearted</span></span>
+            </label>
+          </div>
+
+          <div class="filter-block" style="background:var(--accent-soft);border-color:transparent">
+            <h4 style="color:var(--ink-2)">Not sure?</h4>
+            <p class="small muted" style="margin-bottom:14px">Answer four questions and we will score all sixteen for you.</p>
+            <a class="btn btn-dark btn-sm btn-block" href="#plan">Take PLANA Match</a>
+          </div>
+        </aside>
+
+        <!-- ---------------- RESULTS ---------------- -->
+        <div>
+          <div class="shop-bar">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <label class="sr-only" for="shop-search">Search planners</label>
+              <input class="input" id="shop-search" type="search" placeholder="Search planners, sections, formats…" autocomplete="off">
+              <button class="search-clear" type="button" aria-label="Clear search">×</button>
+            </div>
+            <button class="btn btn-ghost mobile-filter-btn" type="button" id="filter-toggle" aria-expanded="false">Filters</button>
+            <div class="field" style="min-width:190px">
+              <label class="sr-only" for="sort-select">Sort products</label>
+              <select class="select" id="sort-select">
+                <option value="featured">Sort: Featured</option>
+                <option value="price-asc">Price: low to high</option>
+                <option value="price-desc">Price: high to low</option>
+                <option value="rating">Highest rated</option>
+                <option value="reviews">Most reviewed</option>
+                <option value="new">Newest first</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row-between" style="margin-bottom:18px">
+            <span class="small muted" id="result-count" aria-live="polite">Loading…</span>
+            <span class="xs muted">All files include lifetime updates</span>
+          </div>
+
+          <div class="active-filters" id="active-filters"></div>
+          <div class="product-grid" id="shop-grid"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+    </section>
+
+    <!-- ==================== VIEW: PRODUCT ==================== -->
+    <section class="view" id="view-product" data-route="product" hidden>
+  <div id="product-root" class="section-sm" style="padding-top:0"></div>
+
+  
+    </section>
+
+    <!-- ==================== VIEW: PLAN ==================== -->
+    <section class="view" id="view-plan" data-route="plan" hidden>
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="#home">Home</a><span class="sep">/</span><span aria-current="page">Plan Your Life</span>
+    </nav>
+  </div>
+
+  <section class="section-sm" style="position:relative;overflow:hidden">
+    <span class="blob blob-a" aria-hidden="true"></span>
+    <span class="blob blob-b" aria-hidden="true"></span>
+    <div class="container" style="position:relative;z-index:1">
+      <div style="max-width:60ch;margin-bottom:36px">
+        <span class="eyebrow">Plan your life</span>
+        <h1 class="display" style="font-size:clamp(2.4rem,5vw,4rem);margin:16px 0 18px">Your PLANA <em>Match</em></h1>
+        <p class="lede">Four questions. Sixteen planners scored against your answers with a weighted recommendation model — no accounts, no AI, no guessing. You will see exactly why it chose what it chose.</p>
+      </div>
+
+      <div class="quiz-shell">
+        <div id="prev-match" hidden style="margin-bottom:20px"></div>
+        <div id="quiz-mount"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="title-wrap">
+          <span class="eyebrow">How the match works</span>
+          <h2>An algorithm you can actually read</h2>
+          <p>Nothing is hidden behind a black box — here is the whole model.</p>
+        </div>
+      </div>
+      <div class="value-grid">
+        <article class="value reveal reveal-d1">
+          <span class="ic" aria-hidden="true">①</span>
+          <h3>Every planner is scored</h3>
+          <p>Each file declares a 0–5 weight for each possible answer: what it is for, which challenge it solves, which style it suits, and which rhythm it assumes.</p>
+        </article>
+        <article class="value reveal reveal-d2">
+          <span class="ic" aria-hidden="true">②</span>
+          <h3>Your answers are weighted</h3>
+          <p>Purpose counts most (×1.3), then your biggest challenge (×1.15), then style (×1.0) and rhythm (×0.85) as the tie-breaker.</p>
+        </article>
+        <article class="value reveal reveal-d3">
+          <span class="ic" aria-hidden="true">③</span>
+          <h3>The result is explained</h3>
+          <p>The winning score becomes your match percentage, and the reasons, sections, weekly structure and tips are generated from the same answers.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  
+    </section>
+
+    <!-- ==================== VIEW: CUSTOMIZE ==================== -->
+    <section class="view" id="view-customize" data-route="customize" hidden>
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="#home">Home</a><span class="sep">/</span><span aria-current="page">Custom Planner</span>
+    </nav>
+  </div>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-head" style="margin-bottom:34px">
+        <div class="title-wrap">
+          <span class="eyebrow">Custom planner studio</span>
+          <h1>Build the planner that fits</h1>
+          <p>Choose the type, theme, layout and sections. Everything on the right updates the moment you click — including the price.</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" type="button" id="build-reset">Start over</button>
+      </div>
+
+      <div class="builder">
+        <!-- ------------- OPTIONS (rendered by planner.js) ------------- -->
+        <form class="build-panel" id="build-panel" novalidate aria-label="Planner options"></form>
+
+        <!-- ------------- LIVE PREVIEW ------------- -->
+        <div class="preview-col">
+          <div class="preview-shell">
+            <div class="row-between" style="margin-bottom:14px">
+              <span class="eyebrow" style="margin:0">Live preview</span>
+              <div class="row" style="gap:6px">
+                <button class="chip" type="button" data-view-btn="cover" aria-pressed="true">Cover</button>
+                <button class="chip" type="button" data-view-btn="spread" aria-pressed="false">Spread</button>
+                <button class="chip" type="button" data-view-btn="sections" aria-pressed="false">Contents</button>
+              </div>
+            </div>
+
+            <div class="preview-stage" id="preview-stage"></div>
+            <div class="preview-meta" id="preview-meta"></div>
+
+            <div class="row" style="margin-top:14px" id="chosen-sections"></div>
+
+            <div class="price-break" id="price-break"></div>
+
+            <button class="btn btn-primary btn-block btn-lg" type="button" id="build-add" style="margin-top:18px">Add to cart</button>
+            <p class="xs muted" style="text-align:center;margin-top:12px">Your build is saved in this browser · delivered as PDF + GoodNotes</p>
+          </div>
+
+          <div class="note" style="margin-top:18px">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+            <span>Not sure which sections you need? <a href="#plan" style="text-decoration:underline"><b>PLANA Match</b></a> will suggest a set based on how you plan.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+    </section>
+
+    <!-- ==================== VIEW: ABOUT ==================== -->
+    <section class="view" id="view-about" data-route="about" hidden>
+  <div class="container">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="#home">Home</a><span class="sep">/</span><span aria-current="page">About</span>
+    </nav>
+  </div>
+
+  <section class="section-sm" style="position:relative;overflow:hidden">
+    <span class="blob blob-a" aria-hidden="true"></span>
+    <div class="container" style="position:relative;z-index:1">
+      <div style="max-width:64ch">
+        <span class="eyebrow">Our story</span>
+        <h1 class="display" style="font-size:clamp(2.3rem,5vw,3.8rem);margin:16px 0 20px">We make planners for the weeks that <em>do not</em> go to plan.</h1>
+        <p class="lede">PLANA started in a university library at 2am, with a half-finished assignment and a planner that had been abandoned in week three. The problem was never discipline. It was that the planner assumed a life nobody actually lives.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="stat-band reveal">
+        <div><b>42k</b><span>FILES DOWNLOADED</span></div>
+        <div><b>16</b><span>PLANNERS IN THE LIBRARY</span></div>
+        <div><b>4.8</b><span>AVERAGE RATING</span></div>
+        <div><b>63</b><span>COUNTRIES</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <div class="reveal">
+          <span class="eyebrow">What we believe</span>
+          <h2 style="margin:14px 0 18px">A planner should absorb a bad week, not punish it.</h2>
+          <p class="muted">Most planning tools are designed for an idealised version of you: awake at 5am, never sick, never behind. Ours are designed for the real one. That means undated pages, restart spreads without guilt, rest planned as deliberately as work, and structures light enough to survive a week where everything slips.</p>
+          <p class="muted">Everything is made by two people, tested for a full semester before release, and updated for free forever.</p>
+        </div>
+        <div class="value-grid reveal reveal-d2" style="grid-template-columns:1fr">
+          <article class="value">
+            <h3>Design that gets out of the way</h3>
+            <p>Generous whitespace, one clear hierarchy per page, and no decoration that costs you a place to write.</p>
+          </article>
+          <article class="value">
+            <h3>Tested before it ships</h3>
+            <p>Every file runs through a real semester or quarter with a small test group before it reaches the shop.</p>
+          </article>
+          <article class="value">
+            <h3>Priced like a tool, not a subscription</h3>
+            <p>Buy once, own it, update forever. No accounts, no renewals, no held-back features.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="title-wrap"><span class="eyebrow">The road here</span><h2>Four years, one obsession</h2></div>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal"><b>2022</b><div><h3 style="font-family:var(--font-sans);font-size:1.05rem">One file, one library</h3><p class="muted small">The first study planner, made for one person and shared with a class group chat. 400 downloads in a week.</p></div></div>
+        <div class="tl-item reveal"><b>2023</b><div><h3 style="font-family:var(--font-sans);font-size:1.05rem">The Notion year</h3><p class="muted small">Life OS and the Student Hub launch. Planning stops being a document and becomes a system.</p></div></div>
+        <div class="tl-item reveal"><b>2024</b><div><h3 style="font-family:var(--font-sans);font-size:1.05rem">PLANA Match</h3><p class="muted small">Too many files, too little guidance — so we built a recommendation engine that explains itself.</p></div></div>
+        <div class="tl-item reveal"><b>2026</b><div><h3 style="font-family:var(--font-sans);font-size:1.05rem">The custom studio</h3><p class="muted small">Sixteen planners were still never quite right for everyone. Now you can build your own in four minutes.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="title-wrap"><span class="eyebrow">The team</span><h2>Small on purpose</h2></div>
+      </div>
+      <div class="team-grid">
+        <article class="card card-pad member reveal reveal-d1">
+          <span class="face" style="background:linear-gradient(140deg,var(--lav),var(--rose))">A</span>
+          <h3 style="font-size:1.1rem">Amal</h3>
+          <p class="xs muted" style="margin-bottom:10px">Design &amp; typography</p>
+          <p class="small muted">Draws every spread twice: once for the ideal week, once for the week that falls apart.</p>
+        </article>
+        <article class="card card-pad member reveal reveal-d2">
+          <span class="face" style="background:linear-gradient(140deg,var(--sage),var(--sand))">R</span>
+          <h3 style="font-size:1.1rem">Rana</h3>
+          <p class="xs muted" style="margin-bottom:10px">Systems &amp; Notion</p>
+          <p class="small muted">Builds the databases, breaks them on purpose, then rebuilds them so they cannot break for you.</p>
+        </article>
+        <article class="card card-pad member reveal reveal-d3">
+          <span class="face" style="background:linear-gradient(140deg,var(--rose),var(--lav))">Y</span>
+          <h3 style="font-size:1.1rem">You</h3>
+          <p class="xs muted" style="margin-bottom:10px">Test group</p>
+          <p class="small muted">Every release is shaped by notes from the people who actually used the last one.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm" id="faq">
+    <div class="container-narrow">
+      <div class="section-head reveal" style="margin-bottom:24px">
+        <div class="title-wrap"><span class="eyebrow">FAQ</span><h2>Questions worth answering</h2></div>
+      </div>
+      <details class="acc" open><summary>Which apps do the planners work in?</summary>
+        <div class="acc-body">Every PDF planner is hyperlinked and tested in GoodNotes, Notability, Noteshelf and Xodo, and works in any standard PDF reader. Notion templates arrive as a duplicate link. Printables come in A4, A5 and US Letter.</div>
+      </details>
+      <details class="acc"><summary>Do I need an iPad?</summary>
+        <div class="acc-body">No. The files work on Android tablets, Windows, macOS and paper. Only the handwriting experience differs — the structure is identical everywhere.</div>
+      </details>
+      <details class="acc"><summary>Are the planners dated?</summary>
+        <div class="acc-body">Most are undated so you can start on any Tuesday in March without wasting two months of pages. The Calendar set ships both dated 2026 and undated versions.</div>
+      </details>
+      <details class="acc"><summary>What is your refund policy?</summary>
+        <div class="acc-body">Digital files cannot be returned once downloaded, but if something does not work — a broken link, a layout problem, the wrong file — email us and we will fix it or refund you. Updates are always free.</div>
+      </details>
+      <details class="acc"><summary>Can I use PLANA files commercially?</summary>
+        <div class="acc-body">Personal use is included with every purchase. For classroom, team or client use, email hello@plana.studio for an extended licence.</div>
+      </details>
+      <details class="acc"><summary>Is this a real shop?</summary>
+        <div class="acc-body">No — PLANA is a fictional brand built as a front-end portfolio project using only HTML, CSS and vanilla JavaScript. The cart, checkout, recommendation engine and planner builder are all fully functional in the browser, but no payment is ever taken and no data leaves your device.</div>
+      </details>
+    </div>
+  </section>
+
+  
+    </section>
+
+    <!-- ==================== VIEW: CART ==================== -->
+    <section class="view" id="view-cart" data-route="cart" hidden>
+  <div id="cart-page">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="#home">Home</a><span class="sep">/</span>
+        <a href="#shop">Shop</a><span class="sep">/</span>
+        <span aria-current="page">Cart</span>
+      </nav>
+    </div>
+
+    <section class="section-sm">
+      <div class="container">
+        <div class="steps" aria-label="Checkout progress">
+          <span class="st on"><i>1</i> Cart</span><span class="arw">→</span>
+          <span class="st on"><i>2</i> Details</span><span class="arw">→</span>
+          <span class="st"><i>3</i> Download</span>
+        </div>
+
+        <h1 style="margin-bottom:26px">Your cart</h1>
+        <div id="cart-root"></div>
+      </div>
+    </section>
+
+    <!-- ---------------- CHECKOUT ---------------- -->
+    <section class="section-sm" id="checkout-section" hidden>
+      <div class="container">
+        <div class="card card-pad" id="checkout" style="padding:clamp(24px,3.5vw,44px)">
+          <div class="section-head" style="margin-bottom:28px">
+            <div class="title-wrap">
+              <span class="eyebrow">Checkout</span>
+              <h2>Where should we send the files?</h2>
+              <p>This is a portfolio demo — no payment is taken and nothing leaves your browser.</p>
+            </div>
+          </div>
+
+          <form id="checkout-form" novalidate>
+            <div class="checkout-grid">
+              <div class="field">
+                <label for="fname">First name</label>
+                <input class="input" id="fname" autocomplete="given-name" data-rules="required|min3">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+              <div class="field">
+                <label for="lname">Last name</label>
+                <input class="input" id="lname" autocomplete="family-name" data-rules="required">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+              <div class="field full">
+                <label for="email">Email — your download links go here</label>
+                <input class="input" id="email" type="email" autocomplete="email" data-rules="required|email" placeholder="you@email.com">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+              <div class="field full">
+                <label for="country">Country</label>
+                <select class="select" id="country" data-rules="required">
+                  <option value="">Select a country</option>
+                  <option>Kuwait</option><option>Saudi Arabia</option><option>United Arab Emirates</option>
+                  <option>Qatar</option><option>Bahrain</option><option>Oman</option>
+                  <option>United Kingdom</option><option>United States</option><option>Other</option>
+                </select>
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+
+              <div class="field full" style="margin-top:8px">
+                <span class="label">Payment details</span>
+                <div class="note" style="margin-bottom:4px">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>
+                  <span>Demo mode — enter any numbers. Nothing is sent anywhere, and no real card should ever be typed into a portfolio project.</span>
+                </div>
+              </div>
+              <div class="field full">
+                <label for="cc-number">Card number</label>
+                <input class="input" id="cc-number" inputmode="numeric" placeholder="4242 4242 4242 4242" data-rules="required|card" autocomplete="off">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+              <div class="field">
+                <label for="cc-exp">Expiry</label>
+                <input class="input" id="cc-exp" inputmode="numeric" placeholder="MM/YY" data-rules="required|expiry" autocomplete="off">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+              <div class="field">
+                <label for="cc-cvc">CVC</label>
+                <input class="input" id="cc-cvc" inputmode="numeric" placeholder="123" maxlength="4" data-rules="required|cvc" autocomplete="off">
+                <span class="field-error" aria-live="polite"></span>
+              </div>
+
+              <div class="full" style="margin-top:6px">
+                <label class="opt">
+                  <input type="checkbox" id="terms" data-rules="">
+                  <span class="mark" aria-hidden="true"></span>
+                  <span class="opt-text"><b>Email me new templates occasionally</b><span>One short email a week. Unsubscribe any time.</span></span>
+                </label>
+              </div>
+
+              <div class="full row-between" style="margin-top:18px">
+                <span class="small muted">Total due today: <b class="tabular" data-checkout-total>$0</b></span>
+                <button class="btn btn-primary btn-lg" type="submit" id="pay-btn">Pay &amp; download</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------- WISHLIST ---------------- -->
+    <section class="section-sm" hidden>
+      <div class="container">
+        <div class="section-head">
+          <div class="title-wrap"><span class="eyebrow">Your favourites</span><h2>Saved for later</h2></div>
+          <a class="link-arrow" href="#shop?fav=1">See all favourites →</a>
+        </div>
+        <div class="product-grid" id="wishlist-root"></div>
+      </div>
+    </section>
+  </div>
+
+  
+    </section>
+  </main>
+
+  <div id="global-newsletter">
+  <section class="section">
+    <div class="container">
+      <div class="newsletter reveal">
+        <span class="blob blob-a" aria-hidden="true"></span>
+        <div class="split" style="align-items:center;position:relative;z-index:1">
+          <div>
+            <span class="eyebrow" style="color:var(--lav)">The Sunday Reset</span>
+            <h2 style="margin:14px 0 12px">One planning idea, every Sunday.</h2>
+            <p>Short, practical, and never more than a two-minute read. Join and get 15% off your first file plus a free weekly template.</p>
+          </div>
+          <form class="n-form" data-newsletter novalidate>
+            <div class="field" style="flex:1;min-width:230px">
+              <label class="sr-only" for="nl-email">Email address</label>
+              <input class="input" id="nl-email" type="email" placeholder="you@email.com" data-rules="required|email" autocomplete="email">
+              <span class="field-error" aria-live="polite"></span>
+            </div>
+            <button class="btn btn-primary" type="submit">Get 15% off</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div>
+          <a class="brand" href="#home"><span class="glyph" aria-hidden="true">P</span> PLANA</a>
+          <p class="small muted" style="margin-top:16px;max-width:34ch">Digital planners designed around the way you actually live — not the way productivity books say you should.</p>
+          <div class="socials" style="margin-top:20px">
+            <a href="#" aria-label="PLANA on Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg></a>
+            <a href="#" aria-label="PLANA on Pinterest"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 20l2-8m-.5-3a3 3 0 1 1 6 0c0 2.8-1.8 5-4 5"/></svg></a>
+            <a href="#" aria-label="PLANA on TikTok"><svg viewBox="0 0 24 24"><path d="M15 4v9.5a4 4 0 1 1-3.2-3.9"/><path d="M15 4c.5 2.3 2 3.6 4.5 3.8"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <h4>Shop</h4>
+          <ul>
+            <li><a href="#shop?cat=Study%20Planners">Study planners</a></li>
+            <li><a href="#shop?cat=Productivity">Productivity</a></li>
+            <li><a href="#shop?cat=Notion%20Templates">Notion templates</a></li>
+            <li><a href="#shop?cat=Journals">Journals</a></li>
+            <li><a href="#shop?cat=Printables">Printables</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Experience</h4>
+          <ul>
+            <li><a href="#plan">PLANA Match</a></li>
+            <li><a href="#customize">Build your planner</a></li>
+            <li><a href="#about">Our story</a></li>
+            <li><a href="#cart">Cart &amp; checkout</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#about?to=faq">FAQ</a></li>
+            <li><a href="#about?to=faq">Compatibility</a></li>
+            <li><a href="#about?to=faq">Refund policy</a></li>
+            <li><a href="mailto:hello@plana.studio">hello@plana.studio</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> PLANA Studio — a fictional brand built as a front-end portfolio project.</span>
+        <span>Made with HTML, CSS &amp; vanilla JavaScript</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js" defer></script>
+  <script src="js/auth.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/cart.js" defer></script>
+  <script src="js/planner.js" defer></script>
+</body>
+</html>
