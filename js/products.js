@@ -26,7 +26,7 @@ const PALETTES = {
 const PRODUCTS = [
   {
     id: 'p01', slug: 'balanced-student-planner', name: 'The Balanced Student Planner',
-    category: 'Study Planners', price: 18, oldPrice: 26, rating: 4.9, reviews: 412, badge: 'popular',
+    category: 'Study Planners', price: 5.5, oldPrice: 8, rating: 4.9, reviews: 412, badge: 'popular',
     short: 'Semester overview, class schedule and a gentle habit system in one file.',
     description: 'Built with students who burn out by week six in mind. The Balanced Student Planner pairs a full semester map with light-touch weekly pages, so you always know what is coming without over-planning every hour. Assignment trackers, exam countdowns and a rest planner sit side by side — because balance is a system, not a mood.',
     pages: 148, format: 'PDF · GoodNotes · Notability', compat: 'iPad, Android tablet, Windows, printable A4/A5',
@@ -40,7 +40,7 @@ const PRODUCTS = [
   },
   {
     id: 'p02', slug: 'focused-student-planner', name: 'The Focused Student Planner',
-    category: 'Study Planners', price: 22, oldPrice: null, rating: 4.8, reviews: 288, badge: 'new',
+    category: 'Study Planners', price: 6.75, oldPrice: null, rating: 4.8, reviews: 288, badge: 'new',
     short: 'Deep-work timetables, revision cycles and a spaced-repetition log.',
     description: 'For the student who wants fewer, better study hours. Daily deep-work blocks, a spaced-repetition revision log and a distraction audit turn vague "study more" goals into a repeatable weekly loop you can actually finish before midnight.',
     pages: 186, format: 'PDF · GoodNotes · Notability', compat: 'iPad, Android tablet, printable A4',
@@ -54,7 +54,7 @@ const PRODUCTS = [
   },
   {
     id: 'p03', slug: 'quiet-minimal-planner', name: 'Quiet — Minimal Daily Planner',
-    category: 'Productivity', price: 15, oldPrice: null, rating: 4.7, reviews: 519, badge: null,
+    category: 'Productivity', price: 4.5, oldPrice: null, rating: 4.7, reviews: 519, badge: null,
     short: 'One page a day. Three priorities. Nothing else competing for attention.',
     description: 'Quiet strips planning back to what survives a busy day: three priorities, a short schedule strip and space to think. Type-led, monochrome, and deliberately empty — the page never asks you to fill it.',
     pages: 96, format: 'PDF · GoodNotes · Notion', compat: 'Any PDF reader, printable A5',
@@ -68,7 +68,7 @@ const PRODUCTS = [
   },
   {
     id: 'p04', slug: 'notion-life-os', name: 'Notion Life OS',
-    category: 'Notion Templates', price: 34, oldPrice: 48, rating: 5.0, reviews: 731, badge: 'popular',
+    category: 'Notion Templates', price: 10.5, oldPrice: 14.5, rating: 5.0, reviews: 731, badge: 'popular',
     short: 'A connected Notion workspace for goals, projects, habits and study.',
     description: 'Nine linked databases, one dashboard. Life OS connects yearly goals to quarterly outcomes, weekly reviews and daily tasks, so nothing you care about lives in an orphaned list. Includes a guided 20-minute setup walkthrough and a duplicate-and-go link.',
     pages: 9, format: 'Notion template (duplicate link)', compat: 'Notion free & paid plans, web + mobile',
@@ -82,7 +82,7 @@ const PRODUCTS = [
   },
   {
     id: 'p05', slug: 'notion-student-hub', name: 'Notion Student Hub',
-    category: 'Notion Templates', price: 26, oldPrice: null, rating: 4.8, reviews: 344, badge: 'new',
+    category: 'Notion Templates', price: 8, oldPrice: null, rating: 4.8, reviews: 344, badge: 'new',
     short: 'Courses, deadlines, notes and GPA tracking in a single dashboard.',
     description: 'Every course gets a home: syllabus, lecture notes, deadlines and grades roll up into one semester dashboard with an at-a-glance GPA calculator and a "what is due this week" view that updates itself.',
     pages: 7, format: 'Notion template (duplicate link)', compat: 'Notion free & paid plans',
@@ -96,7 +96,7 @@ const PRODUCTS = [
   },
   {
     id: 'p06', slug: 'momentum-habit-tracker', name: 'Momentum Habit Tracker',
-    category: 'Productivity', price: 12, oldPrice: 16, rating: 4.6, reviews: 602, badge: 'sale',
+    category: 'Productivity', price: 3.75, oldPrice: 5, rating: 4.6, reviews: 602, badge: 'sale',
     short: 'Streaks, gentle restarts and a monthly reflection that keeps you going.',
     description: 'Momentum is built around restarting well, not perfect streaks. Track up to twelve habits, see your consistency as colour, and end each month with a two-minute reflection that decides what stays and what goes.',
     pages: 64, format: 'PDF · GoodNotes · printable', compat: 'iPad, printable A4/A5/Letter',
@@ -110,7 +110,7 @@ const PRODUCTS = [
   },
   {
     id: 'p07', slug: 'clarity-goal-journal', name: 'Clarity Goal Journal',
-    category: 'Journals', price: 19, oldPrice: null, rating: 4.9, reviews: 267, badge: null,
+    category: 'Journals', price: 5.75, oldPrice: null, rating: 4.9, reviews: 267, badge: null,
     short: 'Quarterly goal setting with weekly check-ins and honest reviews.',
     description: 'A journal for people who set goals in January and lose them by March. Clarity breaks the year into four workable quarters, each with a written intention, three measurable outcomes, weekly check-ins and a review that asks the uncomfortable questions.',
     pages: 120, format: 'PDF · GoodNotes · printable', compat: 'iPad, printable A5',
@@ -124,7 +124,7 @@ const PRODUCTS = [
   },
   {
     id: 'p08', slug: 'deepwork-weekly-planner', name: 'Deep Work Weekly Planner',
-    category: 'Productivity', price: 21, oldPrice: null, rating: 4.8, reviews: 195, badge: null,
+    category: 'Productivity', price: 6.5, oldPrice: null, rating: 4.8, reviews: 195, badge: null,
     short: 'Time-blocked weeks for people whose calendar keeps eating their work.',
     description: 'A weekly spread designed around protected blocks: two deep-work sessions a day, a shallow-work bucket, and an end-of-week audit that shows exactly where the hours actually went.',
     pages: 132, format: 'PDF · GoodNotes · Notability', compat: 'iPad, Windows, printable A4',
@@ -138,7 +138,7 @@ const PRODUCTS = [
   },
   {
     id: 'p09', slug: 'pastel-monthly-calendar', name: 'Pastel Monthly Calendar Set',
-    category: 'Calendars', price: 9, oldPrice: 14, rating: 4.5, reviews: 830, badge: 'sale',
+    category: 'Calendars', price: 2.75, oldPrice: 4.25, rating: 4.5, reviews: 830, badge: 'sale',
     short: 'Twelve dated months plus an undated set, in four soft colourways.',
     description: 'Clean monthly grids with generous cells, a side column for the month\'s focus, and four colourways that match the rest of the PLANA library. Dated 2026 and undated versions included.',
     pages: 40, format: 'PDF · PNG · printable', compat: 'Print, tablet, desktop wallpaper sizes',
@@ -152,7 +152,7 @@ const PRODUCTS = [
   },
   {
     id: 'p10', slug: 'budget-finance-tracker', name: 'Budget & Finance Tracker',
-    category: 'Productivity', price: 17, oldPrice: null, rating: 4.7, reviews: 221, badge: null,
+    category: 'Productivity', price: 5.25, oldPrice: null, rating: 4.7, reviews: 221, badge: null,
     short: 'Monthly budgets, savings goals and a spending review that adds itself up.',
     description: 'A finance workbook for real life: monthly budget sheets, a savings-goal thermometer, subscription audit, and a spreadsheet companion with formulas already written so the totals maintain themselves.',
     pages: 72, format: 'PDF · XLSX · Google Sheets', compat: 'Excel, Google Sheets, printable A4',
@@ -166,7 +166,7 @@ const PRODUCTS = [
   },
   {
     id: 'p11', slug: 'strong-fitness-planner', name: 'Strong — Fitness & Wellness Planner',
-    category: 'Wellness', price: 16, oldPrice: null, rating: 4.6, reviews: 178, badge: 'new',
+    category: 'Wellness', price: 5, oldPrice: null, rating: 4.6, reviews: 178, badge: 'new',
     short: 'Training splits, progress logs and recovery tracking that respects rest.',
     description: 'Plan a training week you can repeat: split templates, progressive-overload logs, hydration and sleep tracking, and a recovery page that treats rest days as part of the programme rather than a failure.',
     pages: 88, format: 'PDF · GoodNotes · printable', compat: 'iPad, phone, printable A5',
@@ -180,7 +180,7 @@ const PRODUCTS = [
   },
   {
     id: 'p12', slug: 'studio-business-planner', name: 'Studio — Small Business Planner',
-    category: 'Productivity', price: 29, oldPrice: 38, rating: 4.9, reviews: 143, badge: 'popular',
+    category: 'Productivity', price: 8.75, oldPrice: 11.5, rating: 4.9, reviews: 143, badge: 'popular',
     short: 'Client pipeline, content calendar and monthly numbers for solo founders.',
     description: 'Everything a one-person studio needs to stop working from the inbox: a client pipeline, project trackers, a content calendar, and a monthly numbers page that turns invoices into a picture of the year.',
     pages: 164, format: 'PDF · Notion · XLSX', compat: 'Notion, Excel, iPad, printable A4',
@@ -194,7 +194,7 @@ const PRODUCTS = [
   },
   {
     id: 'p13', slug: 'softlight-journal', name: 'Softlight Gratitude Journal',
-    category: 'Journals', price: 13, oldPrice: null, rating: 4.8, reviews: 396, badge: null,
+    category: 'Journals', price: 4, oldPrice: null, rating: 4.8, reviews: 396, badge: null,
     short: 'Five quiet minutes a day: prompts, mood colour, and a weekly kindness page.',
     description: 'A gentle daily journal with morning and evening prompts, a mood colour strip, and weekly pages for the small things worth remembering. Designed to be finished, not to be perfect.',
     pages: 110, format: 'PDF · GoodNotes · printable', compat: 'iPad, phone, printable A5',
@@ -208,7 +208,7 @@ const PRODUCTS = [
   },
   {
     id: 'p14', slug: 'stationery-sticker-kit', name: 'Digital Stationery & Sticker Kit',
-    category: 'Stationery', price: 11, oldPrice: null, rating: 4.7, reviews: 512, badge: null,
+    category: 'Stationery', price: 3.5, oldPrice: null, rating: 4.7, reviews: 512, badge: null,
     short: '480 pre-cropped stickers, washi tapes and paper textures for any planner.',
     description: 'A kit that makes any planner feel like yours: 480 pre-cropped PNG stickers, 24 washi tapes, 12 paper textures and a set of header banners — all colour-matched to the PLANA palettes.',
     pages: 480, format: 'PNG · GoodNotes sticker book', compat: 'GoodNotes, Notability, Canva, Procreate',
@@ -222,7 +222,7 @@ const PRODUCTS = [
   },
   {
     id: 'p15', slug: 'printable-desk-set', name: 'Printable Desk Set',
-    category: 'Printables', price: 8, oldPrice: 12, rating: 4.4, reviews: 289, badge: 'sale',
+    category: 'Printables', price: 2.5, oldPrice: 3.75, rating: 4.4, reviews: 289, badge: 'sale',
     short: 'To-do pads, weekly dashboards and meal planners, ready to print.',
     description: 'Nine printable sheets that live next to a laptop: daily to-do pads, a weekly dashboard, meal planner, grocery list, and a project one-pager. Print once, refill forever.',
     pages: 9, format: 'PDF · print-ready', compat: 'A4, A5 and US Letter',
@@ -236,7 +236,7 @@ const PRODUCTS = [
   },
   {
     id: 'p16', slug: 'academic-year-bundle', name: 'Academic Year Mega Bundle',
-    category: 'Study Planners', price: 39, oldPrice: 68, rating: 5.0, reviews: 154, badge: 'popular',
+    category: 'Study Planners', price: 12, oldPrice: 20.5, rating: 5.0, reviews: 154, badge: 'popular',
     short: 'Four best-selling student files bundled at 42% off.',
     description: 'The complete student stack: Balanced Student Planner, Focused Student Planner, Notion Student Hub and the Sticker Kit — bundled together for the whole academic year, with a shared colour system so everything matches.',
     pages: 820, format: 'PDF · Notion · PNG', compat: 'iPad, Notion, printable A4/A5',
@@ -430,7 +430,9 @@ function plannerArt(o = {}) {
 /* --------------------------------------------------------------------------
    4. CATALOGUE HELPERS
    -------------------------------------------------------------------------- */
-const money = n => '$' + Number(n).toFixed(2).replace(/\.00$/, '');
+/* Kuwaiti dinar is quoted to three decimal places (1 KD = 1000 fils). */
+const CURRENCY = { code: 'KD', decimals: 3 };
+const money = n => CURRENCY.code + ' ' + Number(n).toFixed(CURRENCY.decimals);
 const getProduct = key => PRODUCTS.find(p => p.slug === key || p.id === key) || null;
 
 function starsHTML(rating) {
@@ -491,6 +493,9 @@ Object.assign(window.PLANA, { PRODUCTS, CATEGORIES, PALETTES, plannerArt, produc
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
+  /** Upper bound of the price filter, in KD — matches the range input. */
+  const MAX_PRICE = 13;
+
   function initShop() {
     const grid = $('#shop-grid');
     if (!grid) return;
@@ -500,7 +505,7 @@ Object.assign(window.PLANA, { PRODUCTS, CATEGORIES, PALETTES, plannerArt, produc
     const state = {
       q: params.q || '',
       cats: new Set(params.cat ? [params.cat] : []),
-      max: Number(params.max) || 40,
+      max: Number(params.max) || MAX_PRICE,
       sort: params.sort || 'featured',
       favOnly: params.fav === '1'
     };
@@ -555,7 +560,7 @@ Object.assign(window.PLANA, { PRODUCTS, CATEGORIES, PALETTES, plannerArt, produc
       const p = new URLSearchParams();
       if (state.q) p.set('q', state.q);
       if (state.cats.size === 1) p.set('cat', [...state.cats][0]);
-      if (state.max !== 40) p.set('max', state.max);
+      if (state.max !== MAX_PRICE) p.set('max', state.max);
       if (state.sort !== 'featured') p.set('sort', state.sort);
       if (state.favOnly) p.set('fav', '1');
       const qs = p.toString();
@@ -567,7 +572,7 @@ Object.assign(window.PLANA, { PRODUCTS, CATEGORIES, PALETTES, plannerArt, produc
       const chips = [];
       state.cats.forEach(c => chips.push(`<span class="tag-x">${esc(c)}<button type="button" data-clear-cat="${esc(c)}" aria-label="Remove ${esc(c)} filter">×</button></span>`));
       if (state.q) chips.push(`<span class="tag-x">“${esc(state.q)}”<button type="button" data-clear-q aria-label="Clear search">×</button></span>`);
-      if (state.max < 40) chips.push(`<span class="tag-x">Under ${money(state.max)}<button type="button" data-clear-price aria-label="Clear price filter">×</button></span>`);
+      if (state.max < MAX_PRICE) chips.push(`<span class="tag-x">Under ${money(state.max)}<button type="button" data-clear-price aria-label="Clear price filter">×</button></span>`);
       if (state.favOnly) chips.push(`<span class="tag-x">Favourites only<button type="button" data-clear-fav aria-label="Show all products">×</button></span>`);
       wrap.innerHTML = chips.length ? chips.join('') + `<button class="chip" type="button" id="clear-all">Clear all</button>` : '';
     }
@@ -587,7 +592,7 @@ Object.assign(window.PLANA, { PRODUCTS, CATEGORIES, PALETTES, plannerArt, produc
               <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
             </span>
             <h3>No planners match that</h3>
-            <p>Try a wider price range, or clear a filter or two. Every PLANA file is under $40.</p>
+            <p>Try a wider price range, or clear a filter or two. Every PLANA file is under KD 13.</p>
             <button class="btn btn-ghost btn-sm" type="button" id="empty-reset">Reset filters</button>
           </div>`;
           const r = $('#empty-reset');
@@ -635,13 +640,13 @@ Object.assign(window.PLANA, { PRODUCTS, CATEGORIES, PALETTES, plannerArt, produc
       const c = e.target.closest('[data-clear-cat]');
       if (c) { state.cats.delete(c.dataset.clearCat); $$('input', catList).forEach(i => { if (i.value === c.dataset.clearCat) i.checked = false; }); render(); }
       if (e.target.closest('[data-clear-q]')) { state.q = ''; searchInput.value = ''; render(); }
-      if (e.target.closest('[data-clear-price]')) { state.max = 40; priceInput.value = 40; priceOut.textContent = money(40); render(); }
+      if (e.target.closest('[data-clear-price]')) { state.max = MAX_PRICE; priceInput.value = MAX_PRICE; priceOut.textContent = money(MAX_PRICE); render(); }
       if (e.target.closest('[data-clear-fav]')) { state.favOnly = false; if (favToggle) favToggle.checked = false; render(); }
       if (e.target.closest('#clear-all')) resetAll();
     });
     function resetAll() {
-      state.q = ''; state.cats.clear(); state.max = 40; state.sort = 'featured'; state.favOnly = false;
-      searchInput.value = ''; priceInput.value = 40; priceOut.textContent = money(40); sortSel.value = 'featured';
+      state.q = ''; state.cats.clear(); state.max = MAX_PRICE; state.sort = 'featured'; state.favOnly = false;
+      searchInput.value = ''; priceInput.value = MAX_PRICE; priceOut.textContent = money(MAX_PRICE); sortSel.value = 'featured';
       $$('input', catList).forEach(i => { i.checked = false; });
       if (favToggle) favToggle.checked = false;
       $('.search-wrap').classList.remove('has-value');
@@ -661,7 +666,7 @@ Object.assign(window.PLANA, { PRODUCTS, CATEGORIES, PALETTES, plannerArt, produc
     function applyRoute(p) {
       state.q = p.q || '';
       state.cats = new Set(p.cat ? [p.cat] : []);
-      state.max = Number(p.max) || 40;
+      state.max = Number(p.max) || MAX_PRICE;
       state.sort = p.sort || 'featured';
       state.favOnly = p.fav === '1';
       searchInput.value = state.q;

@@ -398,18 +398,18 @@
      ====================================================================== */
   const BUILD = {
     types: [
-      { k: 'student',  l: 'Student',  d: 'Semester, assignments, revision', base: 16, sections: ['Semester Map', 'Assignments', 'Study Tracker'] },
-      { k: 'work',     l: 'Work',     d: 'Projects, meetings, deep work',   base: 18, sections: ['Weekly Planner', 'Projects', 'Notes'] },
-      { k: 'personal', l: 'Personal', d: 'Habits, home, headspace',          base: 14, sections: ['Habit Tracker', 'Notes', 'Mood Log'] },
-      { k: 'fitness',  l: 'Fitness',  d: 'Training, meals, recovery',        base: 15, sections: ['Workout Log', 'Meals', 'Recovery'] },
-      { k: 'business', l: 'Business', d: 'Clients, content, numbers',        base: 22, sections: ['Pipeline', 'Content Calendar', 'Finance'] }
+      { k: 'student',  l: 'Student',  d: 'Semester, assignments, revision', base: 5, sections: ['Semester Map', 'Assignments', 'Study Tracker'] },
+      { k: 'work',     l: 'Work',     d: 'Projects, meetings, deep work',   base: 5.5, sections: ['Weekly Planner', 'Projects', 'Notes'] },
+      { k: 'personal', l: 'Personal', d: 'Habits, home, headspace',          base: 4.25, sections: ['Habit Tracker', 'Notes', 'Mood Log'] },
+      { k: 'fitness',  l: 'Fitness',  d: 'Training, meals, recovery',        base: 4.5, sections: ['Workout Log', 'Meals', 'Recovery'] },
+      { k: 'business', l: 'Business', d: 'Clients, content, numbers',        base: 6.75, sections: ['Pipeline', 'Content Calendar', 'Finance'] }
     ],
     themes: ['minimal', 'pastel', 'lavender', 'sage', 'dark', 'colorful', 'clay', 'navy'],
     layouts: [
-      { k: 'daily',     l: 'Daily pages',   d: 'One page per day', add: 4 },
-      { k: 'weekly',    l: 'Weekly spread', d: 'Seven columns, one view', add: 2 },
+      { k: 'daily',     l: 'Daily pages',   d: 'One page per day', add: 1.25 },
+      { k: 'weekly',    l: 'Weekly spread', d: 'Seven columns, one view', add: 0.75 },
       { k: 'monthly',   l: 'Monthly grid',  d: 'Zoomed out overview', add: 0 },
-      { k: 'dashboard', l: 'Dashboard',     d: 'Everything on one screen', add: 5 }
+      { k: 'dashboard', l: 'Dashboard',     d: 'Everything on one screen', add: 1.5 }
     ],
     sections: ['Goals', 'Habit Tracker', 'Weekly Planner', 'Study Tracker', 'Finance', 'Notes',
                'Meal Planner', 'Mood Log', 'Reading List', 'Projects', 'Gratitude', 'Time Blocks'],
@@ -454,8 +454,8 @@
       const rows = [
         { l: type.l + ' base file', v: type.base },
         { l: layout.l + ' layout', v: layout.add },
-        { l: `${extras} extra section${extras === 1 ? '' : 's'} (${included} included)`, v: extras * 1.5 },
-        { l: cfg.theme === 'dark' ? 'Dark + light versions' : 'Colour theme', v: cfg.theme === 'dark' ? 2 : 0 }
+        { l: `${extras} extra section${extras === 1 ? '' : 's'} (${included} included)`, v: extras * 0.5 },
+        { l: cfg.theme === 'dark' ? 'Dark + light versions' : 'Colour theme', v: cfg.theme === 'dark' ? 0.75 : 0 }
       ];
       const total = rows.reduce((s, r) => s + r.v, 0);
       return { rows, total, pages: 48 + cfg.sections.length * 14 + (cfg.layout === 'daily' ? 120 : cfg.layout === 'weekly' ? 52 : 12) };

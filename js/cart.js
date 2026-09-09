@@ -15,6 +15,11 @@
   const PROMOS = { PLANA15: { off: .15, label: '15% welcome' }, STUDENT20: { off: .20, label: '20% student' }, BUNDLE10: { off: .10, label: '10% bundle' } };
   const VAT_RATE = 0; // digital goods: price shown is the price paid
 
+  /* Money is settled in whole fils (1 KD = 1000 fils). Rounding every total
+     to the fils keeps the summary honest: subtotal − discount always equals
+     the total the customer is charged, with no fractional remainder. */
+  const fils = n => Math.round(n * 1000) / 1000;
+
   /* ======================================================================
      STATE
      ====================================================================== */
@@ -66,15 +71,15 @@
     },
 
     subtotal() {
-      return this.items.reduce((sum, i) => {
+      return fils(this.items.reduce((sum, i) => {
         const d = this.detail(i); return d ? sum + d.price * i.qty : sum;
-      }, 0);
+      }, 0));
     },
     discount() {
       if (!this.promo || !PROMOS[this.promo]) return 0;
-      return this.subtotal() * PROMOS[this.promo].off;
+      return fils(this.subtotal() * PROMOS[this.promo].off);
     },
-    total() { return Math.max(0, this.subtotal() - this.discount()) * (1 + VAT_RATE); },
+    total() { return fils(Math.max(0, this.subtotal() - this.discount()) * (1 + VAT_RATE)); },
 
     /* wishlist */
     isFav(id) { return this.favs.includes(id); },
