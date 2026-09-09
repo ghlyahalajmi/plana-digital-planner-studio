@@ -103,6 +103,22 @@
     };
   }
 
+  /* auth.users carries the name only when the account was created through the
+     sign-up form. public.profiles is the real source of truth for a display
+     name — it also covers users added from the Supabase dashboard, and any
+     later rename. One small query, then the header chip is correct. */
+  async function hydrateProfile() {
+    const client = SB();
+    if (!client || !sbUser) return;
+    try {
+      const { data } = await client.from('profiles').select('full_name').eq('id', sbUser.id).single();
+      if (data && data.full_name && data.full_name !== sbUser.name) {
+        sbUser = Object.assign({}, sbUser, { name: data.full_name });
+        paintAccount();
+      }
+    } catch (e) { /* the chip just keeps the metadata name */ }
+  }
+
   const guest = {
     get() { return tab.get(GUEST_KEY); },
     set() {
@@ -157,6 +173,7 @@
       sbUser = shape(data.user);
       guest.clear();
       rememberPersistence(persist);
+      await hydrateProfile();
       return { ok: true, user: sbUser };
     },
 
@@ -191,6 +208,7 @@
       sbUser = shape(data.user);
       guest.clear();
       rememberPersistence(persist);
+      await hydrateProfile();
       return { ok: true, user: sbUser };
     },
 
@@ -264,11 +282,13 @@
         local.remove(TAB_ONLY);
       } else if (session) {
         sbUser = shape(session.user);
+        await hydrateProfile();
       }
 
       client.auth.onAuthStateChange((event, s) => {
         sbUser = s ? shape(s.user) : null;
         paintAccount();
+        if (sbUser) hydrateProfile();
         if (event === 'SIGNED_OUT' && P.go) P.go('login');
       });
     } catch (e) {
