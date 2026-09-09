@@ -2,7 +2,8 @@
 
 A premium, fully functional storefront and planning experience for a fictional
 digital-product brand, built with **HTML, CSS and vanilla JavaScript only** —
-no frameworks, no build step, no backend, no external APIs.
+no frameworks and no build step. It runs with no backend at all; adding a
+Supabase project switches the login gate over to real accounts.
 
 > Portfolio project · Front-End Development & UI/UX
 
@@ -146,5 +147,7 @@ with no fractional remainder. In Postgres that is `numeric(6,3)`, never
 
 ## Notes
 
-PLANA is fictional. The checkout is a demo: no payment is processed, no
-network request is made, and nothing leaves the browser.
+PLANA is fictional. The checkout is a demo: no payment is ever processed and
+no card details go anywhere. Without Supabase configured, nothing leaves the
+browser at all; with it, the only data that does is your account, your quiz
+results and a newsletter signup.
