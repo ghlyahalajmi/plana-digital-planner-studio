@@ -13,6 +13,19 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%239C8FC7'/><text x='16' y='22' font-size='16' font-family='Georgia' fill='white' text-anchor='middle'>P</text></svg>">
 
+  <!-- Supabase project.
+       Both values are safe to ship in client code: the anon key identifies
+       the project, it does not authorise anything — row level security in
+       supabase/schema.sql decides what it may touch. NEVER put the
+       service_role key here.
+       Leave both blank to run the site in local demo mode. -->
+  <script>
+    window.PLANA_SUPABASE = {
+      url: '',      // https://YOUR-PROJECT.supabase.co
+      anonKey: ''   // Project Settings → API → anon public key
+    };
+  </script>
+
   <!-- Apply the saved theme before first paint so the page never flashes. -->
   <script>
     (function () {
@@ -21,6 +34,15 @@
         var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
       } catch (e) {}
+
+      // Restoring a Supabase session is asynchronous, so hide the shell until
+      // the router knows whether this visitor is signed in — otherwise the
+      // home page flashes before the login gate replaces it. The timeout is a
+      // failsafe: the page must never stay blank because of this.
+      document.documentElement.setAttribute('data-booting', '');
+      setTimeout(function () {
+        document.documentElement.removeAttribute('data-booting');
+      }, 2500);
     })();
   </script>
 </head>
@@ -178,7 +200,7 @@
               <div class="or-line">or</div>
               <button class="btn btn-ghost btn-block" type="button" data-guest>Continue as a guest</button>
 
-              <div class="demo-note">
+              <div class="demo-note" id="auth-mode-note">
                 <span aria-hidden="true">🔐</span>
                 <span>
                   <b>Demo account</b>
@@ -949,7 +971,9 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.js" defer></script>
   <script src="js/products.js" defer></script>
+  <script src="js/supabase.js" defer></script>
   <script src="js/auth.js" defer></script>
   <script src="js/main.js" defer></script>
   <script src="js/cart.js" defer></script>

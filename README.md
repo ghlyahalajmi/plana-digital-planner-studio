@@ -55,13 +55,17 @@ of a navigation.
 ## Code
 
 ```
-index.html        The whole site: shared shell (nav, newsletter, footer) + 8 view sections
-css/style.css     Design system: tokens → base → components → page blocks → auth → responsive
-js/products.js    Catalogue data, SVG mockup engine, shop + product-detail controllers
-js/auth.js        Sign in / sign up / guest, session handling, the header account menu
-js/main.js        Router + gate, theme, nav, scroll reveal, toasts, modal, validation, home
-js/cart.js        Cart & wishlist state, cart drawer, cart view, checkout flow
-js/planner.js     PLANA MATCH scoring engine + the custom planner builder
+index.html          The whole site: shared shell (nav, newsletter, footer) + 8 view sections
+css/style.css       Design system: tokens → base → components → page blocks → auth → responsive
+js/products.js      Catalogue data, SVG mockup engine, shop + product-detail controllers
+js/supabase.js      Supabase client + data layer (degrades to demo mode when unconfigured)
+js/auth.js          Sign in / sign up / guest, session handling, the header account menu
+js/main.js          Router + gate, theme, nav, scroll reveal, toasts, modal, validation, home
+js/cart.js          Cart & wishlist state, cart drawer, cart view, checkout flow
+js/planner.js       PLANA MATCH scoring engine + the custom planner builder
+supabase/schema.sql Tables, row level security, the place_order() checkout function
+supabase/seed.sql   The full catalogue as SQL, generated from js/products.js
+supabase/README.md  Setup: create project → run SQL → paste keys → auth settings
 ```
 
 Each view controller is initialised once and then reacts to a `plana:route`
@@ -93,24 +97,39 @@ match band. The winning product's reasons, suggested sections, weekly
 structure and productivity tips are all generated from the same answers, so
 the explanation always agrees with the recommendation.
 
-## Accounts (demo only)
+## Accounts
 
-| | |
-| --- | --- |
-| Demo login | `demo@plana.studio` / `plana1234` |
-| Create account | Name, email, password with a live strength meter, confirmation, terms |
-| Guest | One click into the app; the session lasts for the tab only |
-| Keep me signed in | On → `localStorage`; off → `sessionStorage` |
+The login gate runs in one of two modes, decided by whether
+`window.PLANA_SUPABASE` in `index.html` has been filled in.
 
-There is no server, so this is **not real authentication**: accounts live in
-this browser and the password is only run through a one-way, non-cryptographic
-string hash so it is not sitting in storage as plain text. The form says so
-out loud — never type a real password into a portfolio project.
+**Supabase configured** — real accounts. `supabase.auth` handles password
+hashing, sessions, refresh tokens, email confirmation and password reset; a
+trigger creates the matching `profiles` row. See
+[`supabase/README.md`](supabase/README.md).
+
+**Not configured** — local demo mode, so the project still runs from a
+`file://` double-click with no backend. Accounts live in `localStorage` and
+the password only goes through a one-way, non-cryptographic hash so it is not
+sitting there in plain text. That is honest demo behaviour, not security, and
+the sign-in form says so. Demo login: `demo@plana.studio` / `plana1234`.
+
+Either way: guest access is one click, and *Keep me signed in* decides whether
+the session survives closing the tab.
+
+## Money
+
+Prices are in **Kuwaiti dinar**, quoted to three decimals — `KD 5.500`. Totals
+settle in whole fils, so subtotal − discount always equals the total charged,
+with no fractional remainder. In Postgres that is `numeric(6,3)`, never
+`float`.
 
 ## Features
 
 - A login gate with sign in, account creation, guest access and a header
   account menu, with the intended route remembered across the sign-in
+- A Supabase back end for accounts, quiz results and newsletter signups, with
+  a full schema (row level security, snapshotted order lines, a server-side
+  checkout function) ready for the catalogue and cart to move across
 - Product search, multi-category filtering, price filtering and six sort modes,
   with the URL kept in sync so a filtered view can be shared
 - Cart with quantities, promo codes (`PLANA15`, `STUDENT20`, `BUNDLE10`),
