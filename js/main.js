@@ -233,13 +233,24 @@
       e.preventDefault();
       if (!validateForm(form)) { toast('Check your email', 'That address does not look right.', 'err'); return; }
       const btn = $('button[type="submit"]', form);
+      const email = $('input[type="email"]', form).value;
       btn.classList.add('is-loading'); btn.textContent = 'Joining';
-      setTimeout(() => {
-        btn.classList.remove('is-loading'); btn.textContent = 'Joined ✓';
+
+      const done = res => {
+        btn.classList.remove('is-loading');
+        if (res && res.ok === false) {
+          btn.textContent = 'Get 15% off';
+          toast('Could not subscribe', res.message || 'Please try again.', 'err');
+          return;
+        }
+        btn.textContent = 'Joined ✓';
         form.reset();
         toast('You are on the list', 'Your 15% welcome code is on its way.', 'ok');
         setTimeout(() => { btn.textContent = 'Get 15% off'; }, 2600);
-      }, 900);
+      };
+
+      if (P.db && P.db.enabled) P.db.subscribe(email, 'newsletter').then(done, () => done(null));
+      else setTimeout(() => done(null), 900);
     }));
   }
 
@@ -437,9 +448,19 @@
     initHome();
     observeReveals();
 
-    // Router last, so every view controller is listening before the first route
-    window.addEventListener('hashchange', renderRoute);
-    renderRoute();
+    // Router last, so every view controller is listening before the first
+    // route — and only once any stored session has been restored, so the gate
+    // makes its decision with the right answer the first time.
+    const startRouter = () => {
+      window.addEventListener('hashchange', renderRoute);
+      renderRoute();
+      document.documentElement.removeAttribute('data-booting');
+    };
+    if (P.auth && P.auth.ready && typeof P.auth.ready.then === 'function') {
+      P.auth.ready.then(startRouter, startRouter);
+    } else {
+      startRouter();
+    }
 
     // Year in footers
     $$('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });

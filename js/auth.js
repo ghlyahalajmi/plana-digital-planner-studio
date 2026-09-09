@@ -2,12 +2,20 @@
    PLANA — auth.js
    The entry gate: sign in, create an account, or continue as a guest.
 
-   IMPORTANT — this is a front-end portfolio demo, not real authentication.
-   There is no server: "accounts" live in this browser's storage and the
-   password is only run through a one-way string hash so it is not sitting in
-   localStorage in plain text. That is enough to make the flow honest and
-   demonstrable, and nowhere near enough for real credentials — which is why
-   the UI says so, out loud, on the form.
+   Two modes, one API:
+
+     · Supabase configured → real accounts. supabase.auth handles password
+       hashing, sessions, refresh tokens and email confirmation; a trigger in
+       schema.sql creates the matching public.profiles row.
+
+     · Not configured → the original local demo mode, so this portfolio piece
+       still runs from a file:// double-click. Accounts live in localStorage
+       and the password is only put through a one-way, non-cryptographic hash
+       so it is not sitting there in plain text. That is honest demo
+       behaviour, not security — and the form says so.
+
+   Everything else in the app only ever calls PLANA.auth.*, so neither mode
+   leaks outside this file.
    ========================================================================== */
 (function () {
   'use strict';
@@ -16,13 +24,17 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const on = (el, ev, fn) => el && el.addEventListener(ev, fn);
 
-  const USERS_KEY  = 'plana:users';
+  const USERS_KEY   = 'plana:users';
   const SESSION_KEY = 'plana:user';
-  const RETURN_KEY = 'plana:returnTo';
+  const RETURN_KEY  = 'plana:returnTo';
+  const GUEST_KEY   = 'plana:guest';
+  const TAB_ONLY    = 'plana:session-only';
+
+  /** Supabase client, or null in demo mode. */
+  const SB = () => (P.db && P.db.enabled ? P.db.client : null);
 
   /* auth.js loads before main.js (the router asks it questions during boot),
-     so it keeps its own small storage helper rather than depending on
-     PLANA.storage being defined yet. */
+     so it keeps its own small storage helper. */
   const local = {
     get(key, fallback) {
       try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
@@ -31,51 +43,92 @@
     set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {} },
     remove(key) { try { localStorage.removeItem(key); } catch (e) {} }
   };
+  const tab = {
+    get(key) { try { return JSON.parse(sessionStorage.getItem(key)); } catch (e) { return null; } },
+    set(key, v) { try { sessionStorage.setItem(key, JSON.stringify(v)); } catch (e) {} },
+    remove(key) { try { sessionStorage.removeItem(key); } catch (e) {} }
+  };
 
-  /* A session either persists ("keep me signed in") or lasts for the tab. */
-  const session = {
-    get() {
-      try {
-        const raw = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
-        return raw ? JSON.parse(raw) : null;
-      } catch (e) { return null; }
+  /* ======================================================================
+     DEMO MODE STORAGE  (unused when Supabase is configured)
+     ====================================================================== */
+  const demo = {
+    session: {
+      get() {
+        try {
+          const raw = sessionStorage.getItem(SESSION_KEY) || localStorage.getItem(SESSION_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (e) { return null; }
+      },
+      set(user, persist) {
+        try {
+          const raw = JSON.stringify(user);
+          if (persist) { localStorage.setItem(SESSION_KEY, raw); sessionStorage.removeItem(SESSION_KEY); }
+          else { sessionStorage.setItem(SESSION_KEY, raw); localStorage.removeItem(SESSION_KEY); }
+        } catch (e) {}
+      },
+      clear() { try { localStorage.removeItem(SESSION_KEY); sessionStorage.removeItem(SESSION_KEY); } catch (e) {} }
     },
-    set(user, persist) {
-      try {
-        const raw = JSON.stringify(user);
-        if (persist) { localStorage.setItem(SESSION_KEY, raw); sessionStorage.removeItem(SESSION_KEY); }
-        else { sessionStorage.setItem(SESSION_KEY, raw); localStorage.removeItem(SESSION_KEY); }
-      } catch (e) {}
+    /** djb2 — fast, non-cryptographic. Obfuscation for the demo only. */
+    hash(str) {
+      let h = 5381;
+      for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+      return 'h' + (h >>> 0).toString(36);
     },
-    clear() {
-      try { localStorage.removeItem(SESSION_KEY); sessionStorage.removeItem(SESSION_KEY); } catch (e) {}
+    users: () => local.get(USERS_KEY, []),
+    save: list => local.set(USERS_KEY, list),
+    seed() {
+      const list = demo.users();
+      if (!list.some(u => u.email === 'demo@plana.studio')) {
+        list.push({ name: 'Demo Planner', email: 'demo@plana.studio', pass: demo.hash('plana1234'), at: Date.now() });
+        demo.save(list);
+      }
     }
   };
 
-  /** djb2 — a fast, non-cryptographic hash. Demo obfuscation only. */
-  function hash(str) {
-    let h = 5381;
-    for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
-    return 'h' + (h >>> 0).toString(36);
+  /* ======================================================================
+     SESSION STATE
+     ====================================================================== */
+  let sbUser = null;          // shaped { name, email } from the Supabase session
+  let resolveReady;
+  const ready = new Promise(r => { resolveReady = r; });
+
+  function shape(user) {
+    if (!user) return null;
+    const meta = user.user_metadata || {};
+    return {
+      id: user.id,
+      email: user.email,
+      name: meta.full_name || (user.email || '').split('@')[0]
+    };
   }
 
-  const users = () => local.get(USERS_KEY, []);
-  const saveUsers = list => local.set(USERS_KEY, list);
-
-  /* Seed the demo account once, so the form always has something that works. */
-  (function seed() {
-    const list = users();
-    if (!list.some(u => u.email === 'demo@plana.studio')) {
-      list.push({ name: 'Demo Planner', email: 'demo@plana.studio', pass: hash('plana1234'), at: Date.now() });
-      saveUsers(list);
-    }
-  })();
+  const guest = {
+    get() { return tab.get(GUEST_KEY); },
+    set() {
+      const g = { name: 'Guest', email: 'guest@plana.studio', guest: true };
+      tab.set(GUEST_KEY, g);
+      return g;
+    },
+    clear() { tab.remove(GUEST_KEY); }
+  };
 
   /* ======================================================================
-     API — the router asks these questions before rendering any view
+     PUBLIC API — the router calls current() synchronously on every route
      ====================================================================== */
   const auth = {
-    current: () => session.get(),
+    /** Resolves once any existing session has been restored. */
+    ready,
+
+    mode: () => (SB() ? 'supabase' : 'demo'),
+
+    current() {
+      if (sbUser) return sbUser;
+      const g = guest.get();
+      if (g) return g;
+      return SB() ? null : demo.session.get();
+    },
+
     remember(route) { if (route && !/^#?login/.test(route)) local.set(RETURN_KEY, route); },
     takeReturn() {
       const r = local.get(RETURN_KEY, null);
@@ -83,37 +136,107 @@
       return r && r !== '#' ? r.replace(/^#/, '') : 'home';
     },
 
-    signIn(email, pass, persist) {
-      const user = users().find(u => u.email.toLowerCase() === String(email).trim().toLowerCase());
-      if (!user) return { ok: false, field: 'email', message: 'No account found with that email.' };
-      if (user.pass !== hash(pass)) return { ok: false, field: 'pass', message: 'That password does not match.' };
-      const safe = { name: user.name, email: user.email };
-      session.set(safe, persist);
-      return { ok: true, user: safe };
-    },
-
-    signUp(name, email, pass, persist) {
-      const list = users();
-      const clean = String(email).trim().toLowerCase();
-      if (list.some(u => u.email.toLowerCase() === clean)) {
-        return { ok: false, field: 'email', message: 'An account already uses that email.' };
+    async signIn(email, pass, persist) {
+      const client = SB();
+      if (!client) {
+        const user = demo.users().find(u => u.email.toLowerCase() === String(email).trim().toLowerCase());
+        if (!user) return { ok: false, field: 'email', message: 'No account found with that email.' };
+        if (user.pass !== demo.hash(pass)) return { ok: false, field: 'pass', message: 'That password does not match.' };
+        const safe = { name: user.name, email: user.email };
+        demo.session.set(safe, persist);
+        guest.clear();
+        return { ok: true, user: safe };
       }
-      list.push({ name: String(name).trim(), email: clean, pass: hash(pass), at: Date.now() });
-      saveUsers(list);
-      const safe = { name: String(name).trim(), email: clean };
-      session.set(safe, persist);
-      return { ok: true, user: safe };
+
+      const { data, error } = await client.auth.signInWithPassword({
+        email: String(email).trim().toLowerCase(),
+        password: pass
+      });
+      if (error) return { ok: false, field: friendlyField(error), message: friendlyMessage(error) };
+
+      sbUser = shape(data.user);
+      guest.clear();
+      rememberPersistence(persist);
+      return { ok: true, user: sbUser };
     },
 
-    guest() {
-      const safe = { name: 'Guest', email: 'guest@plana.studio', guest: true };
-      session.set(safe, false);
-      return safe;
+    async signUp(name, email, pass, persist) {
+      const client = SB();
+      const clean = String(email).trim().toLowerCase();
+
+      if (!client) {
+        const list = demo.users();
+        if (list.some(u => u.email.toLowerCase() === clean)) {
+          return { ok: false, field: 'email', message: 'An account already uses that email.' };
+        }
+        list.push({ name: String(name).trim(), email: clean, pass: demo.hash(pass), at: Date.now() });
+        demo.save(list);
+        const safe = { name: String(name).trim(), email: clean };
+        demo.session.set(safe, persist);
+        guest.clear();
+        return { ok: true, user: safe };
+      }
+
+      const { data, error } = await client.auth.signUp({
+        email: clean,
+        password: pass,
+        options: { data: { full_name: String(name).trim() } }
+      });
+      if (error) return { ok: false, field: friendlyField(error), message: friendlyMessage(error) };
+
+      // With email confirmation switched on, sign-up returns no session.
+      if (!data.session) {
+        return { ok: true, needsConfirmation: true, user: { name: String(name).trim(), email: clean } };
+      }
+      sbUser = shape(data.user);
+      guest.clear();
+      rememberPersistence(persist);
+      return { ok: true, user: sbUser };
     },
 
-    signOut() { session.clear(); }
+    guest() { return guest.set(); },
+
+    async signOut() {
+      guest.clear();
+      demo.session.clear();
+      local.remove(TAB_ONLY); tab.remove(TAB_ONLY);
+      const client = SB();
+      if (client) { sbUser = null; await client.auth.signOut(); }
+    }
   };
   P.auth = auth;
+
+  /* Supabase always persists its session. "Keep me signed in" is honoured by
+     marking session-only logins in both storages: a fresh tab has the
+     localStorage marker but not the sessionStorage one, and gets signed out
+     during boot. */
+  function rememberPersistence(persist) {
+    if (persist) { local.remove(TAB_ONLY); tab.remove(TAB_ONLY); }
+    else { local.set(TAB_ONLY, true); tab.set(TAB_ONLY, true); }
+  }
+
+  function friendlyField(error) {
+    const m = (error.message || '').toLowerCase();
+    if (m.includes('failed to fetch') || m.includes('load failed') ||
+        m.includes('networkerror') || error.name === 'AuthRetryableFetchError') return 'email';
+    if (m.includes('already registered') || m.includes('already been registered')) return 'email';
+    if (m.includes('email')) return 'email';
+    return 'pass';
+  }
+  function friendlyMessage(error) {
+    const m = (error.message || '').toLowerCase();
+    // Network trouble must not surface as "Failed to fetch" or "Load failed".
+    if (m.includes('failed to fetch') || m.includes('load failed') ||
+        m.includes('networkerror') || m.includes('fetch failed') ||
+        error.name === 'AuthRetryableFetchError') {
+      return 'Could not reach the server. Check your connection and try again.';
+    }
+    if (m.includes('invalid login credentials')) return 'That email and password do not match an account.';
+    if (m.includes('already registered') || m.includes('already been registered')) return 'An account already uses that email.';
+    if (m.includes('email not confirmed')) return 'Confirm your email address first — check your inbox.';
+    if (m.includes('password should be')) return 'Password must be at least 8 characters.';
+    return error.message || 'Something went wrong. Try again.';
+  }
 
   /** 0–4 score used by the strength meter. */
   function strength(pw) {
@@ -126,7 +249,36 @@
   }
 
   /* ======================================================================
-     HEADER CHIP — who is signed in, and how to leave
+     BOOT — restore whatever session exists before the router runs
+     ====================================================================== */
+  (async function restore() {
+    const client = SB();
+    if (!client) { demo.seed(); resolveReady(auth.current()); return; }
+    try {
+      const { data } = await client.auth.getSession();
+      const session = data ? data.session : null;
+
+      // Session-only login opened in a new tab: drop it.
+      if (session && local.get(TAB_ONLY, false) && !tab.get(TAB_ONLY)) {
+        await client.auth.signOut();
+        local.remove(TAB_ONLY);
+      } else if (session) {
+        sbUser = shape(session.user);
+      }
+
+      client.auth.onAuthStateChange((event, s) => {
+        sbUser = s ? shape(s.user) : null;
+        paintAccount();
+        if (event === 'SIGNED_OUT' && P.go) P.go('login');
+      });
+    } catch (e) {
+      console.warn('[plana] session restore failed:', e.message);
+    }
+    resolveReady(auth.current());
+  })();
+
+  /* ======================================================================
+     HEADER CHIP
      ====================================================================== */
   function paintAccount() {
     const user = auth.current();
@@ -139,6 +291,7 @@
     $$('[data-user-email]').forEach(el => { el.textContent = user.guest ? 'Browsing as a guest' : user.email; });
     $$('[data-user-initial]').forEach(el => { el.textContent = (user.name || '?').charAt(0).toUpperCase(); });
   }
+  P.paintAccount = paintAccount;
 
   function initAccountMenu() {
     const btn = $('#account-btn'), pop = $('#account-pop');
@@ -154,10 +307,10 @@
     on(document, 'keydown', e => { if (e.key === 'Escape') close(); });
     $$('a', pop).forEach(a => on(a, 'click', close));
 
-    const out = () => {
+    const out = async () => {
       const name = (auth.current() || {}).name || '';
-      auth.signOut();
       close();
+      await auth.signOut();
       paintAccount();
       P.toast('Signed out', name ? 'See you soon, ' + name + '.' : '', 'info');
       P.go('login');
@@ -173,12 +326,19 @@
     const view = $('#view-auth');
     if (!view) return;
 
-    // Two planner mockups on the brand side
     ['p01', 'p04'].forEach((id, i) => {
       const el = $('#auth-art-' + (i + 1));
       const p = P.getProduct(id);
       if (el && p) el.innerHTML = P.plannerArt({ palette: p.palette, title: p.name, subtitle: p.category, motif: p.cover });
     });
+
+    // The note under the sign-in form should describe the mode actually running.
+    const note = $('#auth-mode-note');
+    if (note) {
+      note.innerHTML = SB()
+        ? '<span aria-hidden="true">🔒</span><span><b>Real accounts</b>Sign-in is handled by Supabase Auth — passwords are hashed server side and every table is protected by row level security.</span>'
+        : '<span aria-hidden="true">🔐</span><span><b>Demo account</b>Use <code>demo@plana.studio</code> / <code>plana1234</code>, or create an account below. Accounts are stored in this browser only — never type a real password into a portfolio project.</span>';
+    }
 
     /* --- tabs --- */
     const panels = { signin: $('#form-signin'), signup: $('#form-signup') };
@@ -214,7 +374,6 @@
       meterLabel.textContent = suPass.value ? LABELS[s] : 'Use 8+ characters, with a number for a stronger password.';
     });
 
-    /* --- helper: put an error under a specific field --- */
     function fieldError(input, message) {
       input.classList.add('invalid');
       input.setAttribute('aria-invalid', 'true');
@@ -223,7 +382,6 @@
       input.focus();
     }
 
-    /** Land the user in the app after a successful sign in / sign up. */
     function enter(user, message) {
       paintAccount();
       P.toast(message, user.guest ? 'Browsing as a guest — nothing is saved to an account.' : 'Welcome, ' + user.name + '.', 'ok');
@@ -231,27 +389,27 @@
     }
 
     /* --- sign in --- */
-    on($('#form-signin'), 'submit', e => {
+    on($('#form-signin'), 'submit', async e => {
       e.preventDefault();
       const form = e.currentTarget;
       if (!P.validateForm(form)) { P.toast('Check your details', 'Both fields are needed to sign in.', 'err'); return; }
       const btn = $('#signin-btn');
       btn.classList.add('is-loading'); btn.textContent = 'Signing in';
-      setTimeout(() => {
-        const res = auth.signIn($('#login-email').value, $('#login-pass').value, $('#remember').checked);
-        btn.classList.remove('is-loading'); btn.textContent = 'Sign in';
-        if (!res.ok) {
-          fieldError(res.field === 'email' ? $('#login-email') : $('#login-pass'), res.message);
-          P.toast('Could not sign in', res.message, 'err');
-          return;
-        }
-        form.reset();
-        enter(res.user, 'Signed in');
-      }, 700);
+
+      const res = await auth.signIn($('#login-email').value, $('#login-pass').value, $('#remember').checked);
+
+      btn.classList.remove('is-loading'); btn.textContent = 'Sign in';
+      if (!res.ok) {
+        fieldError(res.field === 'email' ? $('#login-email') : $('#login-pass'), res.message);
+        P.toast('Could not sign in', res.message, 'err');
+        return;
+      }
+      form.reset();
+      enter(res.user, 'Signed in');
     });
 
     /* --- create account --- */
-    on($('#form-signup'), 'submit', e => {
+    on($('#form-signup'), 'submit', async e => {
       e.preventDefault();
       const form = e.currentTarget;
       const pass = $('#su-pass'), pass2 = $('#su-pass2'), terms = $('#su-terms');
@@ -264,27 +422,42 @@
 
       const btn = $('#signup-btn');
       btn.classList.add('is-loading'); btn.textContent = 'Creating account';
-      setTimeout(() => {
-        const res = auth.signUp($('#su-name').value, $('#su-email').value, pass.value, true);
-        btn.classList.remove('is-loading'); btn.textContent = 'Create my account';
-        if (!res.ok) {
-          fieldError($('#su-email'), res.message);
-          P.toast('Could not create account', res.message, 'err');
-          return;
-        }
-        form.reset();
-        meter.className = 'strength';
-        enter(res.user, 'Account created');
-      }, 900);
+
+      const res = await auth.signUp($('#su-name').value, $('#su-email').value, pass.value, true);
+
+      btn.classList.remove('is-loading'); btn.textContent = 'Create my account';
+      if (!res.ok) {
+        fieldError($('#su-email'), res.message);
+        P.toast('Could not create account', res.message, 'err');
+        return;
+      }
+      form.reset();
+      meter.className = 'strength';
+
+      if (res.needsConfirmation) {
+        P.toast('Check your inbox', 'Confirm ' + res.user.email + ' to finish creating your account.', 'ok', 6000);
+        showTab('signin');
+        return;
+      }
+      enter(res.user, 'Account created');
     });
 
     /* --- guest + forgot password --- */
     $$('[data-guest]').forEach(b => on(b, 'click', () => enter(auth.guest(), 'Browsing as a guest')));
-    on($('#forgot'), 'click', () => {
-      P.toast('Password reset', 'A real reset needs a server — use demo@plana.studio / plana1234.', 'info', 4200);
+
+    on($('#forgot'), 'click', async () => {
+      const client = SB();
+      const email = $('#login-email').value.trim();
+      if (!client) {
+        P.toast('Password reset', 'A real reset needs a server — use demo@plana.studio / plana1234.', 'info', 4200);
+        return;
+      }
+      if (!email) { P.toast('Enter your email first', 'We will send the reset link there.', 'err'); return; }
+      const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo: location.origin + '/#login' });
+      if (error) P.toast('Could not send reset', error.message, 'err');
+      else P.toast('Reset link sent', 'Check ' + email + ' for the link.', 'ok', 5000);
     });
 
-    // Deep link straight to the sign-up tab with #login?tab=signup
     document.addEventListener('plana:route', e => {
       if (e.detail.name !== 'login') return;
       showTab(e.detail.params.tab === 'signup' ? 'signup' : 'signin');

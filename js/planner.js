@@ -257,6 +257,11 @@
       const secs = recommendedSections(win, answers);
       const week = weekStructure(answers);
       P.storage.set('plana:match', { answers, slug: win.slug, score: win.score, at: Date.now() });
+      // Recorded for analysis when a database is configured: comparing what
+      // the model recommends against what people buy is how the weights in
+      // product_match_weights get tuned. Fire and forget — the result screen
+      // never waits on it.
+      if (P.db && P.db.enabled) P.db.recordMatch(answers, win.slug, win.score);
 
       mount.innerHTML = `
       <div class="match-result">
